@@ -36,7 +36,7 @@ RSpec.describe "Monsters", type: :request do
        post '/monsters', params: monster_params
 
        expect(response).to have_http_status(200)
-       
+
        monster = Monster.first
        expect(monster.name).to eq 'Pennywise'
        expect(monster.age).to eq 40
@@ -44,5 +44,49 @@ RSpec.describe "Monsters", type: :request do
        expect(monster.quote).to eq 'Time to float.'
        expect(monster.image).to eq 'https://images.app.goo.gl/Qaxt9KuSWEJcigM2A'
      end
+   end
+   describe "PATCH /update" do
+    it "updates a monster that exists in the database" do 
+      Monster.create(
+          name:'Pennywise',
+          age: 40,
+          specialty:'Trans-dimensional Demonic Alien',
+          quote:'Time to float.',
+          image:'https://images.app.goo.gl/Qaxt9KuSWEJcigM2A',
+      )
+      monster = Monster.first 
+
+      updated_monster_params = {
+        monster: {
+           name:'Pennywise',
+           age: 900,
+           specialty:'Trans-dimensional Demonic Alien',
+           quote:'Time to float.',
+           image:'https://images.app.goo.gl/Qaxt9KuSWEJcigM2A',
+        }
+       }
+       patch "/monsters/#{monster.id}", params: updated_monster_params
+
+       expect(response).to have_http_status(200)
+       updated_monster = Monster.find(monster.id)
+       expect(monster.age).to eq 40
+       expect(updated_monster.age).to eq 900
+    end
+   end
+   describe "DELETE /destroy" do
+    it "deletes a monster from the database" do 
+      Monster.create(
+          name:'Pennywise',
+          age: 40,
+          specialty:'Trans-dimensional Demonic Alien',
+          quote:'Time to float.',
+          image:'https://images.app.goo.gl/Qaxt9KuSWEJcigM2A',
+      )
+      monster = Monster.first 
+
+       delete "/monsters/#{monster.id}"
+
+       expect(response).to have_http_status(200)
+    end
    end
 end

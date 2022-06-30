@@ -11,11 +11,15 @@ class MonstersController < ApplicationController
     end
 
     def update
-
+        monster = Monster.find(params[:id])
+        monster.update(monster_params)
+        render json: monster
     end
 
     def destroy
-
+        monster = Monster.find(params[:id])
+        monster.destroy
+        render json: monster
     end
     private
     def monster_params
