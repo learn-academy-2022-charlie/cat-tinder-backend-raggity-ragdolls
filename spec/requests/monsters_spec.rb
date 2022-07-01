@@ -219,6 +219,82 @@ RSpec.describe "Monsters", type: :request do
        expect(monster.age).to eq 40
        expect(updated_monster.age).to eq 900
     end
+    it 'does not update a monster without a name and minimum length' do 
+      Monster.create(
+          name:'Pennywise',
+          age: 40,
+          specialty:'Trans-dimensional Demonic Alien',
+          quote:'Time to float.',
+          image:'https://images.app.goo.gl/Qaxt9KuSWEJcigM2A',
+      )
+      monster = Monster.first 
+
+      updated_monster_params = {
+        monster: {
+           name:'',
+           age: 900,
+           specialty:'Trans-dimensional Demonic Alien',
+           quote:'Time to float.',
+           image:'https://images.app.goo.gl/Qaxt9KuSWEJcigM2A',
+        }
+       }
+       patch "/monsters/#{monster.id}", params: updated_monster_params
+
+       expect(response).to have_http_status(422)
+       monster = JSON.parse(response.body)
+       expect(monster['name']).to include "can't be blank", "is too short (minimum is 2 characters)"
+    end
+    it 'does not update a monster without a age and minimum length' do 
+      Monster.create(
+          name:'Pennywise',
+          age: 40,
+          specialty:'Trans-dimensional Demonic Alien',
+          quote:'Time to float.',
+          image:'https://images.app.goo.gl/Qaxt9KuSWEJcigM2A',
+      )
+      monster = Monster.first 
+
+      updated_monster_params = {
+        monster: {
+           name:'Pennywise',
+           age: '',
+           specialty:'Trans-dimensional Demonic Alien',
+           quote:'Time to float.',
+           image:'https://images.app.goo.gl/Qaxt9KuSWEJcigM2A',
+        }
+       }
+       patch "/monsters/#{monster.id}", params: updated_monster_params
+
+       expect(response).to have_http_status(422)
+       monster = JSON.parse(response.body)
+       expect(monster['age']).to include "can't be blank", "is too short (minimum is 1 character)"
+    end
+    it 'does not update a monster without a specialty and minimum length' do 
+      Monster.create(
+          name:'Pennywise',
+          age: 40,
+          specialty:'Trans-dimensional Demonic Alien',
+          quote:'Time to float.',
+          image:'https://images.app.goo.gl/Qaxt9KuSWEJcigM2A',
+      )
+      monster = Monster.first 
+
+      updated_monster_params = {
+        monster: {
+           name:'Pennywise',
+           age: 40,
+           specialty:'',
+           quote:'Time to float.',
+           image:'https://images.app.goo.gl/Qaxt9KuSWEJcigM2A',
+        }
+       }
+       patch "/monsters/#{monster.id}", params: updated_monster_params
+
+       expect(response).to have_http_status(422)
+       monster = JSON.parse(response.body)
+       expect(monster['specialty']).to include "can't be blank", "is too short (minimum is 5 characters)"
+    end
+
    end
    describe "DELETE /destroy" do
     it "deletes a monster from the database" do 

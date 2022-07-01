@@ -45,4 +45,45 @@ RSpec.describe Monster, type: :model do
       expect(monster.errors[:image]).to_not be_empty
     end
   end
+  describe 'Update presence' do 
+    it 'will validate name and minimum length?' do 
+      monster =   Monster.create name: 'Chucky', age: 30, specialty: 'Demon Doll', quote: "Hi, I'm Chucky", image: 'https://images.app.goo.gl/dbofFxU3e5Drsu3e9'
+      updated_monster_params = {
+           name:'',
+           age: 30, 
+           specialty: 'Demon Doll', 
+           quote: "Hi, I'm Chucky", 
+           image: 'https://images.app.goo.gl/dbofFxU3e5Drsu3e9'
+       }
+        monster.update(updated_monster_params)
+       p monster.errors[:name]
+       expect(monster.errors[:name]).to_not be_empty
+    end
+    it 'will validate age and minimum length?' do 
+      monster =   Monster.create name: 'Chucky', age: 30, specialty: 'Demon Doll', quote: "Hi, I'm Chucky", image: 'https://images.app.goo.gl/dbofFxU3e5Drsu3e9'
+      updated_monster_params = {
+           name:'Chucky',
+           age: '',
+           specialty: 'Demon Doll', 
+           quote: "Hi, I'm Chucky", 
+           image: 'https://images.app.goo.gl/dbofFxU3e5Drsu3e9'
+       }
+        monster.update(updated_monster_params)
+       p monster.errors[:age]
+       expect(monster.errors[:age]).to_not be_empty
+    end
+    it 'will validate specialty and minimum length?' do 
+      monster =   Monster.create name: 'Chucky', age: 30, specialty: 'Demon Doll', quote: "Hi, I'm Chucky", image: 'https://images.app.goo.gl/dbofFxU3e5Drsu3e9'
+      updated_monster_params = {
+           name:'Chucky',
+           age: 30, 
+           specialty: '', 
+           quote: "Hi, I'm Chucky", 
+           image: 'https://images.app.goo.gl/dbofFxU3e5Drsu3e9'
+       }
+        monster.update(updated_monster_params)
+       p monster.errors[:specialty]
+       expect(monster.errors[:specialty]).to_not be_empty
+    end
+  end
 end

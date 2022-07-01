@@ -17,7 +17,11 @@ class MonstersController < ApplicationController
     def update
         monster = Monster.find(params[:id])
         monster.update(monster_params)
-        render json: monster
+        if monster.valid?
+            render json: monster
+        else
+            render json: monster.errors, status: 422
+        end
     end
 
     def destroy
