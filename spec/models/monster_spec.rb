@@ -1,5 +1,48 @@
 require 'rails_helper'
 
 RSpec.describe Monster, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'presence' do
+    it 'should validate name' do
+      monster = Monster.create age: 30, specialty: 'Demon Doll', quote: "Hi, I'm Chucky", image: 'https://images.app.goo.gl/dbofFxU3e5Drsu3e9'
+      expect(monster.errors[:name]).to_not be_empty
+    end
+    it 'should validate age' do
+      monster = Monster.create name:'Chucky', specialty: 'Demon Doll', quote: "Hi, I'm Chucky", image: 'https://images.app.goo.gl/dbofFxU3e5Drsu3e9'
+      expect(monster.errors[:age]).to_not be_empty
+    end
+    it 'should validate specialty' do
+      monster = Monster.create name:'Chucky', age: 30, quote: "Hi, I'm Chucky", image: 'https://images.app.goo.gl/dbofFxU3e5Drsu3e9'
+      expect(monster.errors[:specialty]).to_not be_empty
+    end
+    it 'should validate quote' do
+      monster = Monster.create name:'Chucky', age: 30, specialty: 'Demon Doll', image: 'https://images.app.goo.gl/dbofFxU3e5Drsu3e9'
+      expect(monster.errors[:quote]).to_not be_empty
+    end
+    it 'should validate image' do
+      monster = Monster.create name:'Chucky', age: 30, specialty: 'Demon Doll', quote: "Hi, I'm Chucky"
+      expect(monster.errors[:image]).to_not be_empty
+    end
+  end
+  describe 'Minimum Length' do
+    it 'will validate a minimum length of monster name to 2' do
+      monster = Monster.create name:'C', age: 30, specialty: 'Demon Doll', quote: "Hi, I'm Chucky", image: 'https://images.app.goo.gl/dbofFxU3e5Drsu3e9'
+      expect(monster.errors[:name]).to_not be_empty
+    end
+    it 'will validate a minimum length of monster age to 1' do
+      monster = Monster.create name:'Chucky', specialty: 'Demon Doll', quote: "Hi, I'm Chucky", image: 'https://images.app.goo.gl/dbofFxU3e5Drsu3e9'
+      expect(monster.errors[:age]).to_not be_empty
+    end
+    it 'will validate a minimum length of monster specialty to 5' do
+      monster = Monster.create name:'Chucky', age: 30, specialty: 'Demo', quote: "Hi, I'm Chucky", image: 'https://images.app.goo.gl/dbofFxU3e5Drsu3e9'
+      expect(monster.errors[:specialty]).to_not be_empty
+    end
+    it 'will validate a minimum length of monster quote to 5' do
+      monster = Monster.create name:'Chucky', age: 30, specialty: 'Demon Doll', quote: "Hi", image: 'https://images.app.goo.gl/dbofFxU3e5Drsu3e9'
+      expect(monster.errors[:quote]).to_not be_empty
+    end
+    it 'will validate a minimum length of monster image to 8' do
+      monster = Monster.create name:'Chucky', age: 30, specialty: 'Demon Doll', quote: "Hi, I'm Chucky", image: 'https'
+      expect(monster.errors[:image]).to_not be_empty
+    end
+  end
 end
